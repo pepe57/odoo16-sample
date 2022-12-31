@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="is_widget16_form_view" model="ir.ui.view">
+            <field name="name">is_widget16_form_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="widget01" widget="widget01"/>
+                            <field name="widget02" widget="widget02"/>
+                            <field name="widget03" widget="widget03"  background_color="black"/>
+                            <field name="widget04" widget="widget04"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="is_widget16_tree_view" model="ir.ui.view">
+            <field name="name">is_widget16_tree_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name='name'/>
+                    <field name="widget01" widget="widget01"/>
+                    <field name="widget02" widget="widget02"/>
+                    <field name="widget03" widget="widget03"/>
+                    <field name="widget04" widget="widget04"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_widget16_action" model="ir.actions.act_window">
+            <field name="name">Widget</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">is.widget16</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="is_widget16_main_menu" sequence="10" name="Widget"/>
+        <menuitem id="is_widget16_menu"      sequence="10" name="Widget" parent="is_widget16_main_menu" action="is_widget16_action"/>
+
+
+        <record id="is_widget16_html_click_form_view" model="ir.ui.view">
+            <field name="name">is_widget16_html_click_form_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <form>
+                    <style>
+                        .o_form_label{
+                            white-space: nowrap;
+                        }
+                        .o_form_view.o_xxl_form_view .o_form_sheet_bg > .o_form_sheet {
+                            width: 100%;
+                            max-width: 100%;
+                        }
+                        .o_form_view.o_xxl_form_view .o_form_sheet_bg {
+                            padding: 0 1px;
+                        }
+                        .o_form_view .o_form_sheet_bg > .o_form_sheet {
+                            padding-left: 1px;
+                            padding-right: 1px;
+                        }
+                        .o_form_view .o_form_sheet_bg > .o_form_sheet {
+                            margin: 0px auto;
+                        }
+                        .o_form_view.o_xxl_form_view .o_form_sheet_bg > .o_form_sheet {
+                            height: 100%;
+                        }
+                    </style>
+                    <sheet>
+                        <table style="border-bottom: 1px solid">
+                            <tr>
+                                <td>Filtre : <br /><field name='name'/></td>
+                                <td><button name="html_click_update_action" type="object" string="OK"/></td>
+                            </tr>
+                        </table>
+                        <div style="width:100%">
+                            <field name='widget_html_click' widget="html_click" nolabel="1"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="is_widget16_html_click_action_action_server" model="ir.actions.server">
+            <field name="name">Widget HTML Click</field>
+            <field name="model_id" ref="is_widget16.model_is_widget16"/>
+            <field name="binding_model_id" ref="is_widget16.model_is_widget16"/>
+            <field name="state">code</field>
+            <field name="code">action = model.html_click_action()</field>
+        </record>
+
+        <!-- <record id="is_widget16_html_click_action" model="ir.actions.act_window">
+            <field name="name">Widget HTML Click</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">is.widget16</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="is_widget16_html_click_form_view"/>
+        </record> -->
+        <menuitem 
+            id="is_widget16_html_click_menu" sequence="20" name="Widget HTML Click" 
+            parent="is_widget16_main_menu" action="is_widget16_html_click_action_action_server"
+        />
+    </data>
+</odoo>

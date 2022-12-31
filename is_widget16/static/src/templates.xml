@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="is_widget16.Widget02" owl="1">
+        <t t-if="props.readonly">
+            <pre t-esc="props.value" class="bg-primary text-white p-3 rounded"/>
+        </t>
+        <t t-else="">
+            <textarea class="o_codeview" t-att-value="props.value"/>
+        </t>
+    </t>
+
+
+
+    <t t-name="is_widget16.HtmlClick" owl="1">
+        <span t-raw="props.value or ''" t-on-click="onGlobalClick" />
+    </t>
+
+</templates>
