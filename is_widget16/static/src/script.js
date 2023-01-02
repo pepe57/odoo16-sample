@@ -8,9 +8,12 @@ console.log("### TEST 1 ###");
 const {useRef, xml, onMounted, onWillStart, markup, Component, onWillUpdateProps} = owl;
 
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
-import {registry} from "@web/core/registry";
+import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { HtmlField } from "@web/views/fields/html/html_field";
+
+
+var rpc = require('web.rpc');
 
 
 
@@ -100,6 +103,28 @@ registry.category("fields").add("widget04", Widget04);
 
 
 
+
+
+
+export class Widget05 extends Component {
+    setup() {
+        console.log("### TEST Widget05 ###");
+        super.setup();
+    }
+}
+Widget05.template = "is_widget16.Widget05";
+Widget05.props = standardFieldProps;
+registry.category("fields").add("widget05", Widget05);
+
+
+
+
+
+
+
+
+
+
 export class HtmlClick extends HtmlField {
     setup() {
         console.log("### TEST HtmlClick setup ###");
@@ -126,13 +151,97 @@ export class HtmlClick extends HtmlField {
         }
         if (ev.target.name=="delete"){
             const divid = "."+ev.target.attributes.divid.value;
-            console.log("delete",divid);
+            //console.log("delete",divid,this,ev);
             $(divid).hide();
+
+
+            //** Test RPC *****************************************************
+            console.log("delete",this.props.record,this.props.record.resModel,this.props.record.data.id);
+            const model = this.props.record.resModel;
+            const docid = parseInt(this.props.record.data.id);
+            rpc.query({
+                model: model,
+                method: 'test_rpc',
+                args: [[docid], divid],
+            }).then(res => {
+                console.log("res =",res);
+                //$(divid).replaceWith(res);
+            });
+
+
+            //TODO : Le fait de supprimer ou remplacer des elements entraine un bug au rafraichissement : 
+            // => Voir comment résoudre cela => https://www.odoo.com/documentation/16.0/developer/reference/frontend/javascript_reference.html
+            //*****************************************************************
         }
     }
+
+
 }
 HtmlClick.template = "is_widget16.HtmlClick";
 registry.category("fields").add("html_click", HtmlClick);
+
+
+
+
+
+export class MarkdownField extends Component {
+    setup() {
+        super.setup();
+        this.textareaRef = useRef("textarea");
+        console.log("setup",this.textareaRef);
+    }
+
+    get markupValue() {
+        // do the transformation into html here, il later part
+        return this.props.value;
+    }
+
+    /**
+     * Returns the value from the editor, for now the editor is just a textarea
+     * @returns {string}
+     */
+    getEditorValue() {
+        console.log("getEditorValue",this.textareaRef.el.value);
+        return this.textareaRef.el.value;
+    }
+
+    /**
+     * Checks if the current value is different from the last saved value.
+     * If the field is dirty it needs to be saved.
+     * @returns {boolean}
+     */
+    _isDirty() {
+        console.log("_isDirty",this.props.readonly,this.props.value,this.getEditorValue())
+        return !this.props.readonly && this.props.value !== this.getEditorValue();
+    }
+
+
+    async commitChanges({urgent = false} = {}) {
+        if (this._isDirty() || urgent) {
+            await this.updateValue();
+        }
+    }
+    
+    async updateValue() {
+        const value = this.getEditorValue();
+        const lastValue = (this.props.value || "").toString();
+        if (value !== null && !(!lastValue && value === "") && value !== lastValue) {
+            if (this.props.setDirty) {
+                this.props.setDirty(true);
+            }
+            await this.props.update(value);
+        }
+    }
+
+
+}
+
+MarkdownField.template = "is_widget16.MarkdownField";
+MarkdownField.props = standardFieldProps;
+
+registry.category("fields").add("markdown", MarkdownField);
+
+
 
 
 console.log("### TEST 3 ###");

@@ -11,8 +11,10 @@ class is_widget16(models.Model):
     widget01 = fields.Char("Widget 01", compute='_compute', readonly=False, store=True)
     widget02 = fields.Char("Widget 02", compute='_compute', readonly=False, store=True)
     widget03 = fields.Char("Widget 03", compute='_compute', readonly=False, store=True)
-    widget04 = fields.Text("Widget 04", compute='_compute', readonly=True , store=True)
+    widget04 = fields.Char("Widget 04", compute='_compute', readonly=True , store=True)
+    widget05 = fields.Char("Widget 05", compute='_compute', readonly=False, store=True)
     widget_html_click = fields.Html("Widget html", compute='_compute_widget_html', readonly=True, store=True, sanitize=False)
+    markdown_field    = fields.Text("MarkdownField")
 
 
     @api.depends('name')
@@ -21,7 +23,8 @@ class is_widget16(models.Model):
             obj.widget01 = obj.name
             obj.widget02 = obj.name
             obj.widget03 = obj.name
-            obj.widget04 = "<h1>Test</h1>"
+            obj.widget04 = obj.name
+            obj.widget05 = obj.name
 
 
     def _compute_widget_html(self):
@@ -76,4 +79,13 @@ class is_widget16(models.Model):
             "res_id": res_id,
         }
         return action
+
+
+    def test_rpc(self,divid):
+        for obj in self:
+            print("test_rpc",obj,obj.name,divid)
+            html="<h1>TEST %s : divid=%s</h1>"%(obj.name, divid)
+            return html
+
+
 

@@ -11,9 +11,61 @@
     </t>
 
 
+    <!-- 
+    export const standardFieldProps = {
+        id: { type: String, optional: true },
+        name: { type: String, optional: true },
+        readonly: { type: Boolean, optional: true },
+        record: { type: Object, optional: true },
+        type: { type: String, optional: true },
+        update: { type: Function, optional: true },
+        value: true,
+        decorations: { type: Object, optional: true },
+        setDirty: { type: Function, optional: true },
+    } 
+    
+    props.records est un Recordobjet défini dans odoo/addons/web/static/src/views/basic_relational_model.js. Il contient de nombreuses informations relatives à l'enregistrement actuel affiché dans la vue. Les propriétés notables de cet objet sont :
+    data : contient toutes les données réelles de l'enregistrement donné.
+    mode : de la vue d'enregistrement, "modifier" ou "lecture seule".
+    fields : une clé, magasin de valeur de tous les autres champs.
+    activeFields : les champs utilisés dans la vue.
+    resModel : par exemple "produit.template".
+    model : la classe JavaScript réelle RelationalModelavec toutes ses méthodes.
+    context : contient l'objet "contexte" habituel d'Odoo avec l'identifiant de l'utilisateur, le fuseau horaire, etc.
+    -->
+    <t t-name="is_widget16.Widget05" owl="1">
+        <div t-esc="props.value" class="bg-info text-white p-3 rounded"/>
+        <div>props.id = <span t-esc="props.id"/></div>
+        <div>props.name = <span t-esc="props.name"/></div>
+        <div>props.readonly = <span t-esc="props.readonly"/></div>
+        <div>props.type = <span t-esc="props.type"/></div>
+        <div>props.record.data = <span t-esc="props.record.data"/></div>
+        <div>props.record.context = <span t-esc="props.record.context"/></div>
+    </t>
+
+
 
     <t t-name="is_widget16.HtmlClick" owl="1">
-        <span t-raw="props.value or ''" t-on-click="onGlobalClick" />
+        <div t-out="props.value or ''" t-on-click="onGlobalClick" />
+        <!-- <div t-out="props.value or ''" /> -->
     </t>
+
+
+    <t t-name="is_widget16.MarkdownField" owl="1">
+        <t t-if="props.readonly">
+            <!-- <div class="o_readonly" t-out="markupValue"/> -->
+            <div class="o_readonly" t-out="props.value"/>
+        </t>
+        <t t-else="">
+            <textarea 
+                t-ref="textarea" 
+                t-att-value="props.value" 
+                t-on-blur="commitChanges"
+                class="o_markdownview" rows="3" style="background-color:gray"  
+            />
+        </t>
+    </t>
+
+
 
 </templates>

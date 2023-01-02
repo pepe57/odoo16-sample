@@ -13,6 +13,8 @@
                             <field name="widget02" widget="widget02"/>
                             <field name="widget03" widget="widget03"  background_color="black"/>
                             <field name="widget04" widget="widget04"/>
+                            <field name="widget05" widget="widget05"/>
+                            <field name="markdown_field" widget="markdown"/>
                         </group>
                     </sheet>
                 </form>
@@ -28,6 +30,8 @@
                     <field name="widget02" widget="widget02"/>
                     <field name="widget03" widget="widget03"/>
                     <field name="widget04" widget="widget04"/>
+                    <field name="widget05" widget="widget05"/>
+                    <field name="markdown_field" widget="markdown"/>
                 </tree>
             </field>
         </record>
@@ -103,5 +107,38 @@
             id="is_widget16_html_click_menu" sequence="20" name="Widget HTML Click" 
             parent="is_widget16_main_menu" action="is_widget16_html_click_action_action_server"
         />
+
+
+
+
+
+        <record id="is_widget16_markdown_form_view" model="ir.ui.view">
+            <field name="name">is_widget16_markdown_form_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="markdown_field" widget="markdown"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="is_widget16_markdown_action" model="ir.actions.act_window">
+            <field name="name">MarkdownField</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">is.widget16</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="is_widget16_markdown_form_view"/>
+        </record>
+        <menuitem 
+            id="is_widget16_markdown_menu" sequence="20" name="MarkdownField" 
+            parent="is_widget16_main_menu" action="is_widget16_markdown_action"
+        />
+
     </data>
 </odoo>
