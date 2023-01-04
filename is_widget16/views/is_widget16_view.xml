@@ -126,8 +126,6 @@
                 </form>
             </field>
         </record>
-
-
         <record id="is_widget16_markdown_action" model="ir.actions.act_window">
             <field name="name">MarkdownField</field>
             <field name="type">ir.actions.act_window</field>
@@ -139,6 +137,46 @@
             id="is_widget16_markdown_menu" sequence="20" name="MarkdownField" 
             parent="is_widget16_main_menu" action="is_widget16_markdown_action"
         />
+
+
+        <!-- Compteur -->
+        <record id="is_widget16_compteur_tree_view" model="ir.ui.view">
+            <field name="name">is_widget16_compteur_tree_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="compteur" widget="compteur"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_widget16_compteur_form_view" model="ir.ui.view">
+            <field name="name">is_widget16_compteur_form_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="compteur" widget="compteur"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="is_widget16_compteur_action" model="ir.actions.act_window">
+            <field name="name">Compteur</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">is.widget16</field>
+            <field name="view_mode">tree,form</field>
+            <field name="views">[("is_widget16_compteur_tree_view","tree"),("is_widget16_compteur_form_view","from")]</field>
+        </record>
+        <menuitem 
+            id="is_widget16_compteur_menu" sequence="30" name="Compteur" 
+            parent="is_widget16_main_menu" action="is_widget16_compteur_action"
+        />
+
+
 
     </data>
 </odoo>

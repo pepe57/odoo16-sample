@@ -44,17 +44,16 @@
     </t>
 
 
-
+    <!-- HtmlClick -->
     <t t-name="is_widget16.HtmlClick" owl="1">
         <div t-out="props.value or ''" t-on-click="onGlobalClick" />
-        <!-- <div t-out="props.value or ''" /> -->
     </t>
 
 
+    <!-- MarkdownField -->
     <t t-name="is_widget16.MarkdownField" owl="1">
         <t t-if="props.readonly">
-            <!-- <div class="o_readonly" t-out="markupValue"/> -->
-            <div class="o_readonly" t-out="props.value"/>
+            <div class="o_readonly" t-out="markupValue"/>
         </t>
         <t t-else="">
             <textarea 
@@ -65,6 +64,28 @@
             />
         </t>
     </t>
+
+
+    <!-- Compteur -->
+    <t t-name="is_widget16.Compteur" owl="1">
+        <button class="btn btn-primary btn-sm" t-on-click="decrement">-</button>
+        <span style="margin-left:5px;margin-right:5px"><t t-esc="state.value"/></span>
+        <button class="btn btn-primary btn-sm" t-on-click="increment">+</button>
+        <br />
+
+        <textarea 
+            t-ref="textarea" 
+            t-att-value="props.value" 
+            t-on-blur="commitChanges"
+            style="background-color:gray"  
+        />
+            <!-- <t t-esc="state.value"/>
+        </div> -->
+
+
+
+    </t>
+
 
 
 

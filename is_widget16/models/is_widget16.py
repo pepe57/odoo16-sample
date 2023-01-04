@@ -15,6 +15,7 @@ class is_widget16(models.Model):
     widget05 = fields.Char("Widget 05", compute='_compute', readonly=False, store=True)
     widget_html_click = fields.Html("Widget html", compute='_compute_widget_html', readonly=True, store=True, sanitize=False)
     markdown_field    = fields.Text("MarkdownField")
+    compteur          = fields.Html("Compteur")
 
 
     @api.depends('name')

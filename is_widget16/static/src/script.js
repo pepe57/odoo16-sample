@@ -5,7 +5,9 @@
 console.log("### TEST 1 ###");
 
 //const {xml, Component} = owl;
-const {useRef, xml, onMounted, onWillStart, markup, Component, onWillUpdateProps} = owl;
+//import { Component, useState } from "@odoo/owl";
+
+const {useRef, xml, onMounted, onWillStart, markup, Component, onWillUpdateProps, useState} = owl;
 
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { registry } from "@web/core/registry";
@@ -193,7 +195,83 @@ export class MarkdownField extends Component {
 
     get markupValue() {
         // do the transformation into html here, il later part
-        return this.props.value;
+        var html = "<h1>"+this.props.value+"</h1>";
+        return html;
+    }
+
+    /**
+     * Returns the value from the editor, for now the editor is just a textarea
+     * @returns {string}
+     */
+    getEditorValue() {
+        console.log("getEditorValue",this.textareaRef.el.value);
+        return this.textareaRef.el.value;
+    }
+
+    /**
+     * Checks if the current value is different from the last saved value.
+     * If the field is dirty it needs to be saved.
+     * @returns {boolean}
+     */
+    _isDirty() {
+        console.log("_isDirty",this.props.readonly,this.props.value,this.getEditorValue())
+        return !this.props.readonly && this.props.value !== this.getEditorValue();
+    }
+
+    async commitChanges({urgent = false} = {}) {
+        if (this._isDirty() || urgent) {
+            await this.updateValue();
+        }
+    }
+    
+    async updateValue() {
+        const value = this.getEditorValue();
+        const lastValue = (this.props.value || "").toString();
+        if (value !== null && !(!lastValue && value === "") && value !== lastValue) {
+            if (this.props.setDirty) {
+                this.props.setDirty(true);
+            }
+            await this.props.update(value);
+        }
+    }
+}
+
+MarkdownField.template = "is_widget16.MarkdownField";
+MarkdownField.props = standardFieldProps;
+
+registry.category("fields").add("markdown", MarkdownField);
+
+
+
+
+// Compteur
+export class Compteur extends Component {
+    setup() {
+        console.log("### TEST Compteur setup ###",useRef("textarea"));
+        super.setup();
+        this.state = useState({ value: 1 });
+        this.textareaRef = useRef("textarea");
+    }
+
+    decrement() {
+        var c = this.state.value - 1;
+        if (c<1) c=1;
+        this.state.value = c;
+        this.updateValue();
+    }
+    increment() {
+        var c = this.state.value + 1;
+        if (c>9) c=9;
+        this.state.value = c;
+        this.updateValue();
+    }
+
+
+
+    get markupValue() {
+        // do the transformation into html here, il later part
+        var html = "<h1>test:"+this.props.value+"</h1>";
+        return html;
     }
 
     /**
@@ -216,6 +294,7 @@ export class MarkdownField extends Component {
     }
 
 
+
     async commitChanges({urgent = false} = {}) {
         if (this._isDirty() || urgent) {
             await this.updateValue();
@@ -223,7 +302,11 @@ export class MarkdownField extends Component {
     }
     
     async updateValue() {
-        const value = this.getEditorValue();
+        //const value = this.getEditorValue();
+        const value = this.state.value;
+
+
+
         const lastValue = (this.props.value || "").toString();
         if (value !== null && !(!lastValue && value === "") && value !== lastValue) {
             if (this.props.setDirty) {
@@ -234,12 +317,14 @@ export class MarkdownField extends Component {
     }
 
 
+
+
 }
+Compteur.template = "is_widget16.Compteur";
+Compteur.props = standardFieldProps;
+registry.category("fields").add("compteur", Compteur);
 
-MarkdownField.template = "is_widget16.MarkdownField";
-MarkdownField.props = standardFieldProps;
 
-registry.category("fields").add("markdown", MarkdownField);
 
 
 
