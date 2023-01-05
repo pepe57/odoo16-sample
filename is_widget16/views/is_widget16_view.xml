@@ -140,13 +140,14 @@
 
 
         <!-- Compteur -->
+        <menuitem  id="is_widget16_compteur_main_menu" sequence="30" name="Compteur" parent="is_widget16_main_menu"/>
         <record id="is_widget16_compteur_tree_view" model="ir.ui.view">
             <field name="name">is_widget16_compteur_tree_view</field>
             <field name="model">is.widget16</field>
             <field name="arch" type="xml">
                 <tree>
                     <field name="name"/>
-                    <field name="compteur" widget="compteur"/>
+                    <field name="compteur"/>
                 </tree>
             </field>
         </record>
@@ -169,12 +170,124 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">is.widget16</field>
             <field name="view_mode">tree,form</field>
-            <field name="views">[("is_widget16_compteur_tree_view","tree"),("is_widget16_compteur_form_view","from")]</field>
+           <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('is_widget16_compteur_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('is_widget16_compteur_form_view')})
+            ]"/>
         </record>
         <menuitem 
-            id="is_widget16_compteur_menu" sequence="30" name="Compteur" 
-            parent="is_widget16_main_menu" action="is_widget16_compteur_action"
+            id="is_widget16_compteur_menu" sequence="30" name="Compteur form view" 
+            parent="is_widget16_compteur_main_menu" action="is_widget16_compteur_action"
         />
+        <record id="is_widget16_compteur_tree_view2" model="ir.ui.view">
+            <field name="name">is_widget16_compteur_tree_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="compteur" widget="compteur"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_widget16_compteur_action2" model="ir.actions.act_window">
+            <field name="name">Compteur</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">is.widget16</field>
+            <field name="view_mode">tree</field>
+           <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('is_widget16_compteur_tree_view2')})
+            ]"/>
+        </record>
+        <menuitem 
+            id="is_widget16_compteur_menu2" sequence="30" name="Compteur tree view" 
+            parent="is_widget16_compteur_main_menu" action="is_widget16_compteur_action2"
+        />
+
+
+        <!-- Négatif -->
+        <record id="is_widget16_negatif_tree_view" model="ir.ui.view">
+            <field name="name">is_widget16_negatif_tree_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="negatif" widget="negatif" color="blue"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_widget16_negatif_form_view" model="ir.ui.view">
+            <field name="name">is_widget16_negatif_form_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="negatif"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="is_widget16_negatif_action" model="ir.actions.act_window">
+            <field name="name">Négatif</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">is.widget16</field>
+            <field name="view_mode">tree,form</field>
+           <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('is_widget16_negatif_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('is_widget16_negatif_form_view')})
+            ]"/>
+        </record>
+        <menuitem 
+            id="is_widget16_negatif_menu" sequence="40" name="Négatif" 
+            parent="is_widget16_main_menu" action="is_widget16_negatif_action"
+        />
+
+
+
+        <!-- Analyse CBN -->
+        <record id="is_widget16_cbn_tree_view" model="ir.ui.view">
+            <field name="name">is_widget16_cbn_tree_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="cbn"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_widget16_cbn_form_view" model="ir.ui.view">
+            <field name="name">is_widget16_cbn_form_view</field>
+            <field name="model">is.widget16</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="cbn" widget="cbn"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="is_widget16_cbn_action" model="ir.actions.act_window">
+            <field name="name">Analyse CBN</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">is.widget16</field>
+            <field name="view_mode">tree,form</field>
+           <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('is_widget16_cbn_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('is_widget16_cbn_form_view')})
+            ]"/>
+        </record>
+        <menuitem 
+            id="is_widget16_cbn_menu" sequence="50" name="Analyse CBN" 
+            parent="is_widget16_main_menu" action="is_widget16_cbn_action"
+        />
+
+
+
 
 
 

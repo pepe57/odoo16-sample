@@ -14,6 +14,8 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { HtmlField } from "@web/views/fields/html/html_field";
 
+const formatters = registry.category("formatters");
+
 
 var rpc = require('web.rpc');
 
@@ -247,42 +249,20 @@ registry.category("fields").add("markdown", MarkdownField);
 // Compteur
 export class Compteur extends Component {
     setup() {
-        console.log("### TEST Compteur setup ###",useRef("textarea"));
         super.setup();
-        this.state = useState({ value: 1 });
-        this.textareaRef = useRef("textarea");
     }
-
     decrement() {
-        var c = this.state.value - 1;
+        var c = this.props.value - 1;
         if (c<1) c=1;
-        this.state.value = c;
+        this.props.value = c;
         this.updateValue();
     }
     increment() {
-        var c = this.state.value + 1;
+        var c = this.props.value + 1;
         if (c>9) c=9;
-        this.state.value = c;
+        this.props.value = c;
         this.updateValue();
     }
-
-
-
-    get markupValue() {
-        // do the transformation into html here, il later part
-        var html = "<h1>test:"+this.props.value+"</h1>";
-        return html;
-    }
-
-    /**
-     * Returns the value from the editor, for now the editor is just a textarea
-     * @returns {string}
-     */
-    getEditorValue() {
-        console.log("getEditorValue",this.textareaRef.el.value);
-        return this.textareaRef.el.value;
-    }
-
     /**
      * Checks if the current value is different from the last saved value.
      * If the field is dirty it needs to be saved.
@@ -292,21 +272,8 @@ export class Compteur extends Component {
         console.log("_isDirty",this.props.readonly,this.props.value,this.getEditorValue())
         return !this.props.readonly && this.props.value !== this.getEditorValue();
     }
-
-
-
-    async commitChanges({urgent = false} = {}) {
-        if (this._isDirty() || urgent) {
-            await this.updateValue();
-        }
-    }
-    
     async updateValue() {
-        //const value = this.getEditorValue();
-        const value = this.state.value;
-
-
-
+        const value = this.props.value;
         const lastValue = (this.props.value || "").toString();
         if (value !== null && !(!lastValue && value === "") && value !== lastValue) {
             if (this.props.setDirty) {
@@ -315,10 +282,6 @@ export class Compteur extends Component {
             await this.props.update(value);
         }
     }
-
-
-
-
 }
 Compteur.template = "is_widget16.Compteur";
 Compteur.props = standardFieldProps;
@@ -327,6 +290,72 @@ registry.category("fields").add("compteur", Compteur);
 
 
 
+// Negatif => Ce Widget affiche les nombres négatif en rouge et n'affiche pas les valeurs à 0
+export class Negatif extends Component {
+    setup() {
+        super.setup();
+    }
+    get formattedValue() {
+        const formatter = formatters.get(this.props.type);
+        var res = formatter(this.props.value, {
+            selection: this.props.record.fields[this.props.name].selection,
+        });
+        return res; 
+    }
+}
+Negatif.template = "is_widget16.Negatif";
+Negatif.props = standardFieldProps;
+registry.category("fields").add("negatif", Negatif);
 
 
-console.log("### TEST 3 ###");
+
+
+
+// Analyse CBN
+export class CBN extends Component {
+    setup() {
+        super.setup();
+    }
+    test() {
+        //** Test RPC *****************************************************
+        const model = this.props.record.resModel;
+        const docid = parseInt(this.props.record.data.id);
+        rpc.query({
+            model: model,
+            method: 'analyse_cbn',
+            args: [[docid]],
+        }).then(res => {
+            console.log("res =",res);
+            this.props.value = res[0];
+            this.updateValue();
+        });
+
+
+        //TODO : Le fait de supprimer ou remplacer des elements entraine un bug au rafraichissement : 
+        // => Voir comment résoudre cela => https://www.odoo.com/documentation/16.0/developer/reference/frontend/javascript_reference.html
+        //*****************************************************************
+
+     }
+
+    /**
+     * @param {MouseEvent} ev
+     */
+    onClick(ev) {
+        console.log(this.props.value);
+        console.log("### TEST CBN onClick ###", ev, ev.target.attributes.divid, ev.target.name); 
+    }
+
+
+    async updateValue() {
+        console.log("updateValue 1",this.props.value);
+        const value = this.props.value;
+        await this.props.update(value);
+    }
+}
+CBN.template = "is_widget16.CBN";
+CBN.props = standardFieldProps;
+registry.category("fields").add("cbn", CBN);
+
+
+
+

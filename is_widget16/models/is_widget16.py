@@ -15,7 +15,9 @@ class is_widget16(models.Model):
     widget05 = fields.Char("Widget 05", compute='_compute', readonly=False, store=True)
     widget_html_click = fields.Html("Widget html", compute='_compute_widget_html', readonly=True, store=True, sanitize=False)
     markdown_field    = fields.Text("MarkdownField")
-    compteur          = fields.Html("Compteur")
+    compteur          = fields.Integer("Compteur")
+    negatif           = fields.Float("Négatif")
+    cbn               = fields.Html("Analyse CBN")
 
 
     @api.depends('name')
@@ -90,3 +92,25 @@ class is_widget16(models.Model):
 
 
 
+    def analyse_cbn(self):
+        for obj in self:
+            print("analyse_cbn",obj,obj.name)
+
+            filtre=[]
+            if obj.name:
+                filtre=[("name","ilike",obj.name)]
+            print(filtre)
+            lines = self.env['account.account'].search(filtre, order='name', limit=5)
+            divid=0
+            divs=[]
+            for line in lines:
+                divid+=1
+                div = """
+                    <div class="div_%s">
+                        <button class="fa fa-trash-o" name="delete" aria-label="Delete row" tabindex="-1" divid="div_%s"></button>
+                        <span  style="cursor: pointer;background-color:beige;" model="%s" docid=%s>%s</span>
+                    </div>
+                """%(divid,divid,line._name,line.id,line.name)
+                divs.append(div)
+            html = "\n".join(divs)
+            return [html,divs]

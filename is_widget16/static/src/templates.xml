@@ -69,21 +69,41 @@
     <!-- Compteur -->
     <t t-name="is_widget16.Compteur" owl="1">
         <button class="btn btn-primary btn-sm" t-on-click="decrement">-</button>
-        <span style="margin-left:5px;margin-right:5px"><t t-esc="state.value"/></span>
+        <span style="margin-left:5px;margin-right:5px"><t t-esc="props.value"/></span>
         <button class="btn btn-primary btn-sm" t-on-click="increment">+</button>
-        <br />
+    </t>
 
-        <textarea 
-            t-ref="textarea" 
-            t-att-value="props.value" 
-            t-on-blur="commitChanges"
-            style="background-color:gray"  
+
+    <!-- Negatif -->
+    <t t-name="is_widget16.Negatif" owl="1">
+        <t t-if="props.readonly">
+            <span t-if="props.value!=0"
+                t-esc="formattedValue"
+                t-attf-style="{{ props.value &lt; 0 ? 'color:red' : 'color:blue'}}"
+            />
+        </t>
+        <input 
+            t-else="" 
+            t-att-id="props.id" 
+            t-ref="numpadDecimal"  
+            t-att-placeholder="props.placeholder" 
+            t-att-type="props.inputType" 
+            inputmode="numeric" 
+            class="o_input" 
+            t-att-step="props.step"
         />
-            <!-- <t t-esc="state.value"/>
+    </t>
+
+
+    <!-- CBN -->
+    <t t-name="is_widget16.CBN" owl="1">
+        <button class="btn btn-primary btn-sm" t-on-click="test">TEST</button>
+        <div t-out="props.value or ''" t-on-click="onClick" />
+
+
+        <!-- <div style="margin-top:3px; background-color:gray">
+            <t t-out="props.value" t-on-click="onClick"/>
         </div> -->
-
-
-
     </t>
 
 
